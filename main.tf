@@ -1,10 +1,12 @@
 provider "google" {
-  #credentials = file("/home/ubuntu/cred.json")
-  provider "google-beta" {
-  project     = "hu-devops-gcp"
-  region      = "us-central1"
-  }
+  project = "hu-devops-gcp"
+  region = "us-central1"
 }
+
+provider "google-beta" {
+  project = "hu-devops-gcp"
+  region = "us-central1"
+} 
 
 module "gke_auth" {
   source       = "terraform-google-modules/kubernetes-engine/google//modules/auth"
