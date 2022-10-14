@@ -1,5 +1,9 @@
 provider "google" {
-  credentials = file("/home/ubuntu/cred.json")
+  #credentials = file("/home/ubuntu/cred.json")
+  provider "google-beta" {
+  project     = "hu-devops-gcp"
+  region      = "us-central1"
+  }
 }
 
 module "gke_auth" {
