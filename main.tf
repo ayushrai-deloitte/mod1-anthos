@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = file("cred.json")
+  credentials = file("/home/ubuntu/.config/gcloud/application_default_credentials.json")
 }
 
 module "gke_auth" {
