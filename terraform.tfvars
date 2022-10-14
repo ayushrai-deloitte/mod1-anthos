@@ -1,1 +1,1 @@
-project_id= "hu-devops-gcp"
+project_id = "hu-devops-gcp"
