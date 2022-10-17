@@ -1,12 +1,13 @@
 provider "google" {
-  project = "hu-devops-gcp"
-  region = "us-central1"
+  credentials = file("/home/ayushrai15111999/cred.json")
+}
+provider "kubernetes" {
+  host                   = "https://${module.gke.endpoint}"
+  token                  = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
 }
 
-provider "google-beta" {
-  project = "hu-devops-gcp"
-  region = "us-central1"
-} 
+data "google_client_config" "default" {}
 
 module "gke_auth" {
   source       = "terraform-google-modules/kubernetes-engine/google//modules/auth"
@@ -19,6 +20,14 @@ module "gke_auth" {
 resource "local_file" "kubeconfig" {
   content  = module.gke_auth.kubeconfig_raw
   filename = "kubeconfig-${var.env_name}"
+}
+
+module "asm" {
+  source            = "terraform-google-modules/kubernetes-engine/google//modules/asm"
+  project_id        = var.project_id
+  cluster_name      = module.gke.name
+  cluster_location  = module.gke.location
+  enable_cni        = true
 }
 
 module "gcp-network" {
@@ -52,7 +61,7 @@ module "gke" {
   name              = "${var.cluster_name}-${var.env_name}"
   regional          = false
   region            = var.region
-  zones             = ["us-central1-c"]
+  zones             = ["us-central1-f"]
   network           = module.gcp-network.network_name
   subnetwork        = module.gcp-network.subnets_names[0]
   ip_range_pods     = var.ip_range_pods_name
@@ -60,8 +69,8 @@ module "gke" {
   node_pools = [
     {
       name           = "node-pool"
-      machine_type   = "n2-standard-2"
-      node_locations = "us-central1-c"
+      machine_type   = "e2-standard-4"
+      node_locations = "us-central1-f"
       min_count      = var.minnode
       max_count      = var.maxnode
       disk_size_gb   = var.disksize
