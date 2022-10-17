@@ -40,16 +40,16 @@ variable "service-account-id" {
 }
 variable "cpus" {
   description = "Number of cpus"
-  default     = "2"
+  default     = "4"
 }
 
 variable "minnode" {
   description = "Minimum number of node pool"
-  default     = 1
+  default     = 4
 }
 variable "maxnode" {
   description = "Maximum number of node pool"
-  default     = 2
+  default     = 5
 }
 
 variable "disksize" {
